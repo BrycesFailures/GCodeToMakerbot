@@ -1,0 +1,43 @@
+html, body{
+  background-color: #161612;
+}
+
+#gCodeInput {
+  visibility: hidden;
+}
+
+#modelName {
+  background: #ffffee;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: calc(20% - 75px/2);
+  border: 0px solid #ccc;
+  display: block;
+  padding: 0px 0px;
+  width: 25%;
+  height: 80px;
+  color: #5172a8;
+  font-size: 400%;
+  font-family: monospace;
+  text-align: center;
+  line-height: 150px;
+}
+
+#inputLabel {
+  background: #5172a8;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: calc(5% - 75px/2);
+  border: 0px solid #ccc;
+  display: block;
+  padding: 0px 0px;
+  cursor: pointer;
+  width: 25%;
+  height: 150px;
+  color: #ffffee;
+  font-size: 600%;
+  font-family: monospace;
+  text-align: center;
+  line-height: 150px;
+  user-select: none;
+}
