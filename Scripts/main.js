@@ -5,6 +5,9 @@ var inputElm;
 
 var thumbnails = [];
 
+var temp = 180;
+
+
 
 var checkLoop = setInterval(function() {
 
@@ -52,6 +55,13 @@ function start() {
         meta.num_z_layers = layers.length;
         meta.num_z_transitions = layers.length - 1;
         meta.total_commands = posArr.length;
+        meta.extrusion_temp = temp;
+        meta.miracle_config.extruderTemp0 = temp;
+        meta.machine_config.extruder_profiles["mk12"].materials.pla.temperature = temp;
+        meta.machine_config.extruder_profiles["mk13"].materials.pla.temperature = temp;
+        meta.machine_config.extruder_profiles["mk13_impla"].materials.pla.temperature = temp;
+        meta.printer_settings.extruder_temperatures[0] = temp;
+        meta.toolhead_0_temperature = temp;
 
         var printString = JSON.stringify(print);
 
