@@ -59,7 +59,7 @@ function start() {
         meta.miracle_config.extruderTemp0 = temp;
         meta.machine_config.extruder_profiles["mk12"].materials.pla.temperature = temp;
         meta.machine_config.extruder_profiles["mk13"].materials.pla.temperature = temp;
-        meta.machine_config.extruder_profiles["mk13_impla"].materials.pla.temperature = temp;
+        meta.machine_config.extruder_profiles["mk13_impla"].materials["im-pla"].temperature = temp;
         meta.printer_settings.extruder_temperatures[0] = temp;
         meta.toolhead_0_temperature = temp;
 
