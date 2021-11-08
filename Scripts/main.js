@@ -5,7 +5,7 @@ var inputElm;
 
 var thumbnails = [];
 
-var temp = 180;
+var temp = 215;
 
 
 
@@ -40,7 +40,7 @@ function start() {
 
         var extension = myFile.name.split('.').pop().toLowerCase();
 
-        if (extension != "gcode") {
+        if (extension != "gcode" && extension != "suckmydickmakerbot") {
           alert("no");
           return;
         }
@@ -49,16 +49,17 @@ function start() {
         gCodeArr = gCodeText.split('\n');
         loadGCode();
 
-        //download(JSON.stringify(print), "print.jsontoolpath");
+        //download(JSON.stringify(print), "print.jsontoolpath");     no dont do that
 
         var meta = JSON.parse(JSON.stringify(baseMeta));
         meta.num_z_layers = layers.length;
         meta.num_z_transitions = layers.length - 1;
         meta.total_commands = posArr.length;
+        meta.extruder_temperature = temp;
         meta.extrusion_temp = temp;
         meta.miracle_config.extruderTemp0 = temp;
         meta.machine_config.extruder_profiles["mk12"].materials.pla.temperature = temp;
-        meta.machine_config.extruder_profiles["mk13"].materials.pla.temperature = temp; 
+        meta.machine_config.extruder_profiles["mk13"].materials.pla.temperature = temp;
         meta.machine_config.extruder_profiles["mk13_impla"].materials["im-pla"].temperature = temp;
         meta.printer_settings.extruder_temperatures[0] = temp;
         meta.toolhead_0_temperature = temp;
@@ -73,7 +74,7 @@ function start() {
         zip.file("thumbnail_320x200.png", thumbnails[2], {base64: true});
         zip.generateAsync({type:"blob"})
         .then(function(content) {
-            // see FileSaver.js
+            // see FileSaver.js for the fuckin uh function
             saveAs(content, document.getElementById('modelName').value+".makerbot");
       });
 
