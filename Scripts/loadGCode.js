@@ -8,18 +8,21 @@ var layerIndex = 0;
 var startIndex;
 var searchIndex;
 
+var feedrate = 10;
+
 var print = [];
 
 var baseCommand = {"command" : {"function": "move", "parameters": {"x": null, "y": null, "z": null, "a": 10.000000, "feedrate": 10.000000}, "tags": ["Connection"], "metadata": {"relative": {"x": false, "y": false, "z": false, "a": false}}}}
 
-// BIG ASS NOTE:( Need to sort the array of positions by layer )
-// DOUBLE BIG ASS NOTE:( SLICE FOR ULTIMAKER2 IT'S SUPER NICE THANK YOU :) )
+// DOUBLE BIG ASS NOTE:( SLICE FOR REPLICATOR2X IT'S SUPER NICE THANK YOU :) )
 
 function loadGCode() {
 
-  startIndex = gCodeArr.indexOf('G11') - 1;
+  startIndex = gCodeArr.indexOf('(<layer>)') + 4 ;
 
   searchIndex = startIndex + 2;
+
+  console.log(getNumAfterChar(gCodeArr[searchIndex], "F"));
 
   startPos = getXY(startIndex);
 
@@ -31,6 +34,10 @@ function loadGCode() {
 
       if (i + startIndex + 3 > gCodeArr.length) {
         break;
+      }
+
+      if (gCodeArr[searchIndex].includes("F")) {
+        feedrate = Math.round((getNumAfterChar(gCodeArr[searchIndex], "F") / 60) * 1000) / 1000
       }
 
       if (gCodeArr[searchIndex] == "" || !gCodeArr[searchIndex].includes("X")) {
@@ -76,9 +83,19 @@ function loadGCode() {
         var _command = JSON.parse(JSON.stringify(baseCommand));  // this is how you clone a json object
         _command.command.parameters.x = _pos.x;
         _command.command.parameters.y = _pos.y;
-        _command.command.parameters.z = Math.round(layerIndex * 0.2 * 1000) / 1000;
+        _command.command.parameters.z = Math.round((layerIndex * 0.2 + 0.2) * 1000) / 1000;
+        if (gCodeArr[searchIndex].includes("F")) {
+          _command.command.parameters.a = Math.round(getNumAfterChar(gCodeArr[searchIndex], "A") * 1000000) / 1000000;
+          _command.command.parameters.feedrate = feedrate;
+        } else {
+          _command.command.parameters.a = print[print.length-1].command.parameters.a;
+          _command.command.parameters.feedrate = 10.000;
+          //_command.command.tags = ["Not Printing Just Moving, Wink"];
+        }
 
-        print.push(_command);
+        if (_command.command.parameters.x >= -1000000 && _command.command.parameters.y >= -1000000) {
+          print.push(_command);
+        }
 
 
         searchIndex++;
@@ -103,6 +120,7 @@ function loadGCode() {
       break;
     }
   }
+  layers.splice(layers.length-1,1);
 
   console.log("Layers: "+numLayers);
 
@@ -157,5 +175,26 @@ function getXY(_index) {
   _pos.y = parseFloat(_pos.y);
 
   return _pos;
+
+}
+
+
+
+function getNumAfterChar(_string, _char) {
+
+  if (_string == null || _string == "") {
+    return null;
+  }
+
+  var _searchIndex = getCharAt(_string,_char) + 1;
+
+  var _val = ""
+  while (_string.charAt(_searchIndex) != " " && _searchIndex < _string.length) {
+    _searchIndex++;
+    _val += _string.charAt(_searchIndex);
+  }
+  _val = parseFloat(_val);
+
+  return _val;
 
 }
