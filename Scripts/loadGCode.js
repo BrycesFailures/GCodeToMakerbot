@@ -9,6 +9,8 @@ var startIndex;
 var searchIndex;
 
 var feedrate = 10;
+var extrusion_dist = 10;
+var duration_s = 1;
 
 var print = [];
 
@@ -21,8 +23,6 @@ function loadGCode() {
   startIndex = gCodeArr.indexOf('(<layer>)') + 4 ;
 
   searchIndex = startIndex + 2;
-
-  console.log(getNumAfterChar(gCodeArr[searchIndex], "F"));
 
   startPos = getXY(startIndex);
 
@@ -105,6 +105,12 @@ function loadGCode() {
     i++;
 
   }
+
+  extrusion_dist = print[print.length-1].command.parameters.a;
+  duration_s = Math.round(extrusion_dist) / 30 * 60;
+
+  console.log("Extrusion Dist: "+extrusion_dist);
+  console.log("Estimated Time: "+duration_s+"s");
 
   // find layer #
   for (let i = 1; i < 101; i++) {
