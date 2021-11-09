@@ -63,6 +63,9 @@ function start() {
         meta.machine_config.extruder_profiles["mk13_impla"].materials["im-pla"].temperature = temp;
         meta.printer_settings.extruder_temperatures[0] = temp;
         meta.toolhead_0_temperature = temp;
+        meta.extrusion_distance_mm = extrusion_dist;
+        meta.extrusion_distance_a_mm = extrusion_dist;
+        meta.duration_s = duration_s;
 
         var printString = JSON.stringify(print);
 
