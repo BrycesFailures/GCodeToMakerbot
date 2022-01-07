@@ -90,7 +90,8 @@ function loadGCode() {
         } else {
           _command.command.parameters.a = print[print.length-1].command.parameters.a;
           _command.command.parameters.feedrate = 10.000;
-          //_command.command.tags = ["Not Printing Just Moving, Wink"];
+          // This is the default tag for traveling in makerbot's files
+          _command.command.tags = ["Leaky Travel Move"];
         }
 
         if (_command.command.parameters.x >= -1000000 && _command.command.parameters.y >= -1000000) {
